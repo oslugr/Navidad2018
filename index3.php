@@ -11,19 +11,22 @@ function create_image($user){
 		global $i;
 		global $fontname;	
 		global $quality;
+		//echo $user;
 		$file = "covers/".md5($user[2]['name'].$user[0]['name'].$user[1]['name']).".jpg";	
 	
-	//Si ya existe, no se creta (Se quita para depurar)	
+	//Si ya existe, no se crea (Se quita para depurar)	
 	if (!file_exists($file)) {	
 			
 
 			// Imagen base utilizada para poner texto encima
-			$im = imagecreatefromjpeg("postal10.jpeg");
+			$im = imagecreatefromjpeg("imagen3_calendario.jpg");
 			
 			// Se generan los colores a utilizar
 			$color['white'] = imagecolorallocate($im, 255, 255, 255);
+			$color['green'] = imagecolorallocate($im, 55, 189, 102);
 			$color['black'] = imagecolorallocate($im, 0, 0, 0);
-			$color['red'] = imagecolorallocate($im, 255, 11, 22);
+			$color['red'] = imagecolorallocate($im, 255, 0, 0);
+			$color['brown'] = imagecolorallocate($im, 80, 00, 00);
 
 			// Definimos la linea de inicio del texto
 			$height=0;
@@ -36,12 +39,12 @@ function create_image($user){
 		}
 
 		if($numLin==1)
-			$y = imagesy($im) - $height - 540;
+			$y = imagesy($im) - $height - 400;
 		else
-			$y = imagesy($im) - $height - 600;
+			$y = imagesy($im) - $height - 4200;
 
  		//Posición inicial del texto
- 		$x=70;
+ 		$x=190;
 		// Recorremos el array y escribimos el texto	
 		foreach ($user as $value){
 			// Función de calculo del centro de la imagen.
@@ -49,9 +52,9 @@ function create_image($user){
 
 			imagettftext($im, $value['font-size'], 0, $x, $y+$i, $color[$value['color']], $fontname,$value['name']);
 			// Añadimos 50px de desplazamiento a la siguiente linea
-			$i = $i+90;	
+			$i = $i+190;	
 			//Desplazamiento de la siguiente linea de texto
-			$x = $x+80;
+			$x = $x+50;
 			
 		}
 			// Creamos la imagen
@@ -78,18 +81,18 @@ function center_text($string, $font_size){
 	
 		array(
 			'name'=> 'La Oficina de Software Libre', 
-			'font-size'=>'60',
-			'color'=>'red'),
+			'font-size'=>'40',
+			'color'=>'white'),
 			
 		array(
 			'name'=> 'Quiere desearte unas felices fiestas',
-			'font-size'=>'40',
-			'color'=>'red'),
+			'font-size'=>'20',
+			'color'=>'white'),
 			
 		array(
 			'name'=> '¡Y un próspero año nuevo!',
-			'font-size'=>'40',
-			'color'=>'red'
+			'font-size'=>'20',
+			'color'=>'white'
 			)
 			
 	);
@@ -117,18 +120,18 @@ function center_text($string, $font_size){
 	
 		array(
 			'name'=> $_POST['nombre'], 
-			'font-size'=>'60',
-			'color'=>'red'),
+			'font-size'=>'120',
+			'color'=>'brown'),
 			
 		array(
 			'name'=> $_POST['dedicatoria'],
-			'font-size'=>'40',
-			'color'=>'red'),
+			'font-size'=>'80',
+			'color'=>'brown'),
 			
 		array(
 			'name'=> $_POST['dedicatoria2'],
-			'font-size'=>'40',
-			'color'=>'red'
+			'font-size'=>'80',
+			'color'=>'brown'
 			)
 			
 	);		
@@ -136,7 +139,6 @@ function center_text($string, $font_size){
 	}
 		
 	}
-
 // run the script to create the image
 $filename = create_image($user);
 
@@ -147,7 +149,6 @@ $filename = create_image($user);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Generador de Postales Navideñas de la Oficina de Software Libre</title>
-<link href="https://fonts.googleapis.com/css?family=Alef" rel="stylesheet">
 <style>
 
 * {
@@ -205,12 +206,14 @@ label{
 .divimagen{
     margin: 2%;
     padding: 1%;
+    width: 60%;
     background: rgba(255, 255, 255, 0.7);
     margin-left: auto;
     margin-right: auto;
 }
 .cuerpo{
 	margin: 2%;
+        width: 40%;
 	background: rgba(255, 255, 255, 0.7);
 	padding: 1%;
 	margin-left: 0%;
@@ -227,14 +230,15 @@ label{
 <body>
 
 <div class="divimagen">
-<p style="font-size: 20px;    color: red;    width: 80%;"> 1. Esta es la imagen elegida</p>
-<img src="<?=$filename;?>?id=<?=rand(0,1292938);?>" width="800" height="533"/><br/><br/>
+<p style="font-size: 20px;    color: red;    width: 80%;"><b> 1. Esta es la imagen elegida</b></p>
+<img src="<?=$filename;?>?id=<?=rand(0,1292938);?>" width="80%" height="90%"/><br/><br/>
 </div>
 
 <div class="cuerpo">
 
 
-<p style="font-size:  20px; color: red; width: 100%;display:  inline-table;"> 2. Modifica el texto</p>
+
+<p style="font-size:  20px; color: red; width: 40%;display:  inline-table;"><b> 2. Introduce el texto</b></p>
 <div class="formulario">
 	<form action="" method="post">
 	<label for="name">Linea Principal*</label>
@@ -243,13 +247,13 @@ label{
 	<input required type="text" value="<?php if(isset($_POST['dedicatoria'])){echo $_POST['dedicatoria'];}?>" name="dedicatoria" placeholder="Dedicatoria Linea 1"><br/>
 	<label for="dedicatoria2">Dedicatoria linea 2</label>
 	<input required type="text" value="<?php if(isset($_POST['dedicatoria2'])){echo $_POST['dedicatoria2'];}?>" name="dedicatoria2" placeholder="Dedicatoria Linea 2"><br/>
-	<p style="font-size:  20px; color: red; width: 100%;display:  inline-table;"> 3. Actualiza tu imagen</p>
+	
+<p style="font-size:  20px; color: red; width: 100%;display:  inline-table;"><b> 3. Actualiza tu imagen</b></p>
 	<input name="submit" type="submit" class="btn btn-primary" value="Actualizar Imagen" style="margin: 3%;" />
-<p style="font-size:  20px; color: red; width: 100%;display:  inline-table;"> 4. Descarga la felicitación</p>
+<p style="font-size:  20px; color: red; width: 100%;display:  inline-table;"><b> 4. Descarga la felicitación</b></p>
 	<input value="Descargar Imagen" type="submit" onclick="document.getElementById('<?=$filename;?>').click()" style="margin: 3%;"/>
 	<a id="<?=$filename;?>" href="<?=$filename;?>"" download hidden></a>
 <p style="font-size:  0px; color: red; width: 100%;display:  inline-table;"> 4. Descarga la felicitación</p>
-
 		<input style="margin: 3%;" value="Volver a la Web" type="button" class="button_active" onclick="location.href='http://osl.ugr.es/generador-de-felicitaciones-navidenas-de-la-oficina-de-software-libre/';" />
 
 	</form>
